@@ -36,17 +36,17 @@ export default function Home() {
         <source src="/bg_v1.webm" type="video/webm" />
         Your browser does not support the video tag.
       </video>
-      <div className="absolute inset-0 flex items-start justify-center pt-20">
+      <div className="absolute inset-0 flex items-center justify-center px-4">
         <div className="text-center">
-          <h1 className="text-[12rem] font-bold text-purple-600 drop-shadow-2xl">
+          <h1 className="text-6xl sm:text-8xl md:text-10xl lg:text-[12rem] font-bold text-purple-600 drop-shadow-2xl">
             {currentWeek}
           </h1>
-          <p className="text-4xl font-semibold text-purple-600 drop-shadow-xl mt-4">
+          <p className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-purple-600 drop-shadow-xl mt-2 sm:mt-4">
             {new Date().getDate()} {new Date().toLocaleDateString('sv-SE', { 
               month: 'long'
             })} {new Date().getFullYear()}
           </p>
-          <p className="text-2xl font-medium text-purple-500 drop-shadow-lg mt-2">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-purple-500 drop-shadow-lg mt-1 sm:mt-2">
             {currentTime.toLocaleTimeString('sv-SE', {
               hour: '2-digit',
               minute: '2-digit'
