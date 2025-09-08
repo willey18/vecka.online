@@ -4,22 +4,44 @@ import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [currentWeek, setCurrentWeek] = useState(1);
 
-  // Function to get current week number
-  const getCurrentWeek = () => {
-    const now = new Date();
-    const start = new Date(now.getFullYear(), 0, 1);
-    const days = Math.floor((now.getTime() - start.getTime()) / (24 * 60 * 60 * 1000));
-    return Math.ceil((days + start.getDay() + 1) / 7);
+  // Function to get current week number (ISO 8601)
+  const getCurrentWeek = (date?: Date) => {
+    const now = date || new Date();
+    
+    // Get the date of the Monday of the current week
+    const monday = new Date(now);
+    const dayOfWeek = now.getDay();
+    const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Sunday = 0, so go back 6 days
+    monday.setDate(now.getDate() + daysToMonday);
+    
+    // Get the date of the Monday of week 1 of the current year
+    const jan4 = new Date(now.getFullYear(), 0, 4); // January 4th is always in week 1
+    const jan4Monday = new Date(jan4);
+    const jan4DayOfWeek = jan4.getDay();
+    const daysToJan4Monday = jan4DayOfWeek === 0 ? -6 : 1 - jan4DayOfWeek;
+    jan4Monday.setDate(jan4.getDate() + daysToJan4Monday);
+    
+    // Calculate the difference in weeks
+    const timeDiff = monday.getTime() - jan4Monday.getTime();
+    const weekDiff = Math.floor(timeDiff / (7 * 24 * 60 * 60 * 1000));
+    
+    return weekDiff + 1;
   };
 
-  const currentWeek = getCurrentWeek();
-
-  // Update time every minute
+  // Update time and week number every minute
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 60000); // Update every minute
+    const updateTimeAndWeek = () => {
+      const now = new Date();
+      setCurrentTime(now);
+      setCurrentWeek(getCurrentWeek(now));
+    };
+
+    // Initial update
+    updateTimeAndWeek();
+
+    const timer = setInterval(updateTimeAndWeek, 60000); // Update every minute
 
     return () => clearInterval(timer);
   }, []);
